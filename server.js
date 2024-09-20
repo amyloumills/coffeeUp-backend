@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
+import {signupUser, loginUser} from "./controllers/authcontroller.js";
 const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 3000;
@@ -88,5 +89,25 @@ app.delete("/coffee/:id", async (req, res) => {
     res.status(204).end();
   } catch (error) {
     res.status(500).json({error: error.message});
+  }
+});
+
+app.post("/signup", async (req, res) => {
+  const {email, password} = req.body;
+  try {
+    const user = await signUpUser(email, password);
+    res.status(201).json({message: "User signed up successfully", user});
+  } catch (error) {
+    res.status(500).json({error: error.message});
+  }
+});
+
+app.post("/login", async (req, res) => {
+  const {email, password} = req.body;
+  try {
+    const user = await loginUser(email, password);
+    res.status(200).json({message: "User logged in successfully", user});
+  } catch (error) {
+    res.status(400).json({error: error.message});
   }
 });
