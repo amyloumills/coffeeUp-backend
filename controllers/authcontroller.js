@@ -5,7 +5,6 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const signUpUser = async (email, password) => {
-  // Create a user with Supabase Auth
   const {user, error} = await supabase.auth.signUp({
     email,
     password,
@@ -15,10 +14,9 @@ const signUpUser = async (email, password) => {
     throw new Error(error.message);
   }
 
-  // Insert the user into the custom users table
   const {error: insertError} = await supabase
     .from("users")
-    .insert([{id: user.id, email}]); // Use the user ID from Supabase Auth
+    .insert([{id: user.id, email}]);
 
   if (insertError) {
     throw new Error(insertError.message);
