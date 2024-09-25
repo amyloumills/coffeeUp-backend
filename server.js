@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
-import {signUpUser, loginUser} from "./controllers/authcontroller.js";
+const {signUpUser, loginUser} = require("./controllers/authcontroller");
 const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 3000;
