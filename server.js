@@ -11,8 +11,6 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// middleware to limit the number of requests
-
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
