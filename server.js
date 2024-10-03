@@ -92,16 +92,23 @@ app.delete("/coffee/:id", async (req, res) => {
 
 app.post("/signup", async (req, res) => {
   const {email, password} = req.body;
+  if (!email || !password) {
+    return res.status(400).json({error: "Email and password are required"});
+  }
   try {
     const user = await signUpUser(email, password);
     res.status(201).json({message: "User signed up successfully", user});
   } catch (error) {
-    res.status(500).json({error: error.message});
+    const statusCode = error.isClientError ? 400 : 500;
+    res.status(statusCode).json({error: error.message});
   }
 });
 
 app.post("/login", async (req, res) => {
   const {email, password} = req.body;
+  if (!email || !password) {
+    return res.status(400).json({error: "Email and password are required"});
+  }
   try {
     const user = await loginUser(email, password);
     res.status(200).json({message: "User logged in successfully", user});
