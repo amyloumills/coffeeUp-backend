@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
+const coffeeRoutes = require("./routes/coffeeRoutes");
 const {signUpUser, loginUser} = require("./controllers/authcontroller");
 const app = express();
 require("dotenv").config();
@@ -20,74 +21,14 @@ app.use(limiter);
 app.use(express.json());
 app.use(cors());
 
+app.use("/coffee", coffeeRoutes);
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
-});
-
-app.get("/coffee", async (req, res) => {
-  const {data, error} = await supabase.from("Coffee").select("*");
-
-  if (error) {
-    return res.status(500).json({error: error.message});
-  }
-
-  res.json(data);
-});
-
-app.post("/coffee", async (req, res) => {
-  const newCoffee = req.body;
-
-  try {
-    const {data, error} = await supabase.from("Coffee").insert([newCoffee]);
-
-    if (error) {
-      return res.status(500).json({error: error.message});
-    }
-
-    res.status(201).json(data);
-  } catch (error) {
-    res.status(500).json({error: error.message});
-  }
-});
-
-app.put("/coffee/:id", async (req, res) => {
-  const {id} = req.params;
-  const updatedCoffee = req.body;
-
-  try {
-    const {error} = await supabase
-      .from("Coffee")
-      .update(updatedCoffee)
-      .eq("id", id);
-
-    if (error) {
-      return res.status(500).json({error: error.message});
-    }
-
-    res.status(200).json({message: "Coffee updated successfully"});
-  } catch (error) {
-    res.status(500).json({error: error.message});
-  }
-});
-
-app.delete("/coffee/:id", async (req, res) => {
-  const {id} = req.params;
-
-  try {
-    const {error} = await supabase.from("Coffee").delete().eq("id", id);
-
-    if (error) {
-      return res.status(500).json({error: error.message});
-    }
-
-    res.status(204).end();
-  } catch (error) {
-    res.status(500).json({error: error.message});
-  }
 });
 
 app.post("/signup", async (req, res) => {
