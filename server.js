@@ -7,11 +7,6 @@ const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 3000;
 
-const {createClient} = require("@supabase/supabase-js");
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
