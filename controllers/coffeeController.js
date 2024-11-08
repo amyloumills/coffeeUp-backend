@@ -6,7 +6,14 @@ const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const getCoffee = async (req, res) => {
-  const { data, error } = await supabase.from("Coffee").select("*");
+  const {userId} = req.params;
+  if (!userId) {
+    return res.status(400).json({error: "Missing user id"});
+  }
+  const {data, error} = await supabase
+    .from("Coffee")
+    .select("*")
+    .eq("user_id", userId);
   if (error) {
     return res.status(500).json({ error: error.message });
   }
