@@ -13,7 +13,7 @@ const getCoffee = async (req, res) => {
   const {data, error} = await supabase
     .from("Coffee")
     .select("*")
-    .eq("user_id", userId);
+    .eq("userId", userId);
   if (error) {
     return res.status(500).json({ error: error.message });
   }
