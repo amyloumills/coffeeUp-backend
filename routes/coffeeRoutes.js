@@ -8,7 +8,7 @@ const {
 
 const router = express.Router();
 
-router.get("/", getCoffee);
+router.get("/:userId", getCoffee);
 router.post("/", addCoffee);
 router.put("/:id", updateCoffee);
 router.delete("/:id", deleteCoffee);
