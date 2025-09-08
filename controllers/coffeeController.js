@@ -1,19 +1,20 @@
 require("dotenv").config();
 
-const {createClient} = require("@supabase/supabase-js");
+const { createClient } = require("@supabase/supabase-js");
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const getCoffee = async (req, res) => {
-  const {userId} = req.params;
+  const { userId } = req.params;
   if (!userId) {
-    return res.status(400).json({error: "Missing user id"});
+    return res.status(400).json({ error: "Missing user id" });
   }
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from("Coffee")
     .select("*")
-    .eq("userId", userId);
+    .eq("userId", userId)
+    .order("name", { ascending: true });
   if (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -32,7 +33,10 @@ const addCoffee = async (req, res) => {
 const updateCoffee = async (req, res) => {
   const { id } = req.params;
   const updatedCoffee = req.body;
-  const { error } = await supabase.from("Coffee").update(updatedCoffee).eq("id", id);
+  const { error } = await supabase
+    .from("Coffee")
+    .update(updatedCoffee)
+    .eq("id", id);
   if (error) {
     return res.status(500).json({ error: error.message });
   }
